@@ -75,8 +75,7 @@ function viewDepartments() {
   db.query('SELECT * FROM department', (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
-    }
-    console.table(res);
+    };
     mainPrompt();
   });
 }
@@ -97,8 +96,7 @@ function viewEmployees() {
   db.query("SELECT * FROM employee", (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
-    }
-    console.table(res);
+    };
     mainPrompt();
   });
 }
@@ -119,8 +117,7 @@ function addDepartment() {
       db.query("SELECT * FROM department", function (err, res) {
         if (err) {
           res.status(500).json({ error: err.message });
-        }
-        console.table(res);
+        };
         mainPrompt();
       });
     });
@@ -166,8 +163,7 @@ function addRole() {
       db.query("SELECT * FROM roles", function (err, res) {
         if (err) {
           res.status(500).json({ error: err.message });
-        }
-        console.table(res);
+        };
         mainPrompt();
       });
     });
@@ -206,8 +202,7 @@ function addEmployee() {
       db.query("SELECT * FROM employee", function (err, res) {
         if (err) {
           res.status(500).json({ error: err.message });
-        }
-        console.table(res);
+        };
         mainPrompt();
       });
     }); 
