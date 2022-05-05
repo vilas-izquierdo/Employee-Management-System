@@ -1,3 +1,6 @@
+source schema.sql;
+
+
 SELECT * FROM department;
 
 
