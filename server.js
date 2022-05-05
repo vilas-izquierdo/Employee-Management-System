@@ -85,8 +85,7 @@ function viewRoles() {
   db.query("SELECT * FROM roles", (err, res) => {
     if (err) {
       res.status(500).json({ error: err.message });
-    }
-    console.table(res);
+    };
     mainPrompt();
   });
 }
