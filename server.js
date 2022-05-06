@@ -5,9 +5,6 @@ const app = express();
 const inquirer = require('inquirer');
 require("console.table");
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
 const db = mysql.createConnection(
   {
     host: 'localhost',
@@ -74,33 +71,36 @@ function mainPrompt() {
 function viewDepartments() {
 
   db.query('SELECT * FROM department', (err, res) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    }
+   
+    db.connect(function (err) {
+      if (err) throw err;
+
     console.table(res);
     mainPrompt();
-  });
+   }) });
 }
 
 function viewRoles() {
 
   db.query("SELECT * FROM roles", (err, res) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    }
+   
+    db.connect(function (err) {
+      if (err) throw err;
+
     console.table(res);
-    mainPrompt();
+    mainPrompt();})
   });
 }
 
 function viewEmployees() {
 
   db.query("SELECT * FROM employee", (err, res) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    }
+    db.connect(function (err) {
+
+      if (err) throw err;
+
     console.table(res);
-    mainPrompt();
+    mainPrompt();})
   });
 }
 // // THEN I am prompted to enter the name of the department and that department is added to the database
@@ -116,14 +116,16 @@ function addDepartment() {
   
       db.query("INSERT INTO department SET ?", 
       {
-        name: addIt.addDepartment, 
-      }, function (err, res) {
+        department_name: addIt.addDepartment});
+
+        db.query("SELECT * from department", (err, res) => {
+      
         if (err) throw err;
         console.table(res);
         mainPrompt();
       });
-    });
-}
+    });}
+
 // THEN I am prompted to enter the name, salary, and department 
 // for the role and that role is added to the database
 function addRole() {
@@ -159,7 +161,7 @@ function addRole() {
     ])
     .then(function (addIt) {
       db.query("INSERT INTO roles SET ?", {
-        name: addIt.addRoles
+        title: addIt.addRoles
       });
 
       db.query("INSERT INTO roles SET ?", 
@@ -167,7 +169,8 @@ function addRole() {
         title: addIt.role_name, 
         salary: addIt.role_salary, 
         department_id: addIt.role_department, 
-      }, function (err, res) {
+      }), db.query("SELECT * roles", (err, res) => {
+      
         if (err) throw err;
         console.table(res);
         mainPrompt();
@@ -211,52 +214,15 @@ function addEmployee() {
         last_name: addIt.employee_last_name, 
         role_id: addIt.employee_role, 
         manager_id: addIt.employee_manager
-      },
-      function (err, res) {
+      }),
+      db.query("SELECT * from employee", (err, res) => {
+      
         if (err) throw err;
         console.table(res);
         mainPrompt();
       });
-    }); 
+    });
 }
-
-
-
-
-// app.get('/api/employees', (req, res) => {
-
-//   const sql = `SELECT * from employee`;
-
-//   db.query(sql, (err, rows) => {
-//     if (err) {
-//       res.status(500).json({ error: err.message });
-//        return;
-//     }
-//     res.json({
-//       message: 'success',
-//       data: rows
-//     });
-//   });
-// });
-
-// app.get('/api/roles', (req, res) => {
-
-//   const sql = `SELECT * from roles`;
-
-//   db.query(sql, (err, rows) => {
-//     if (err) {
-//       res.status(500).json({ error: err.message });
-//        return;
-//     }
-//     res.json({
-//       message: 'success',
-//       data: rows
-//     });
-//   });
-// });
-
-
-
 
 
 app.listen(PORT, () => {
