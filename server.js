@@ -113,14 +113,13 @@ function addDepartment() {
         message: "Name of department",
       })
     .then(function (addIt) {
-      db.query("INSERT INTO department SET ?", {
-        name: addIt.addDepartment
-      });
-
-      db.query("SELECT * FROM department", function (err, res) {
-        if (err) {
-          res.status(500).json({ error: err.message });
-        };
+  
+      db.query("INSERT INTO department SET ?", 
+      {
+        name: addIt.addDepartment, 
+      }, function (err, res) {
+        if (err) throw err;
+        console.table(res);
         mainPrompt();
       });
     });
@@ -163,10 +162,14 @@ function addRole() {
         name: addIt.addRoles
       });
 
-      db.query("SELECT * FROM roles", function (err, res) {
-        if (err) {
-          res.status(500).json({ error: err.message });
-        };
+      db.query("INSERT INTO roles SET ?", 
+      {
+        title: addIt.role_name, 
+        salary: addIt.role_salary, 
+        department_id: addIt.role_department, 
+      }, function (err, res) {
+        if (err) throw err;
+        console.table(res);
         mainPrompt();
       });
     });
@@ -202,10 +205,16 @@ function addEmployee() {
         name: addIt.addDepartment
       });
 
-      db.query("SELECT * FROM employee", function (err, res) {
-        if (err) {
-          res.status(500).json({ error: err.message });
-        };
+      db.query("INSERT INTO employee SET ?", 
+      {
+        first_name: addIt.employee_name, 
+        last_name: addIt.employee_last_name, 
+        role_id: addIt.employee_role, 
+        manager_id: addIt.employee_manager
+      },
+      function (err, res) {
+        if (err) throw err;
+        console.table(res);
         mainPrompt();
       });
     }); 
